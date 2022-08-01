@@ -6,11 +6,10 @@ const { register,login, reminders, delReminders } = require('./controllers/contr
 
 const server = http.createServer((req,res) => {
     if(req.url === '/api/register' && req.method==='POST'){ //POST - WORKS
-        register(res,/*username from frontend, hashed password from*/)
+        register(res,'Hello22', 'Hola1213')
     }
-    else if(req.url === '/api/login' && req.method==='POST'){ //POST
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.end(JSON.stringify({/*JSON to SQL*/}))
+    else if(req.url === '/api/login' && req.method==='POST'){ //POST - WORKS
+        login(res,'Hello22', 'Hola1213')
     }
     else if(req.url === '/api/reminders' && req.method==='GET'){ //GET
         res.writeHead(200, { 'Content-Type': 'application/json' })
