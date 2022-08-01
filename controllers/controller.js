@@ -7,6 +7,7 @@ const DB = require('../models/dbServer')
 async function register(res,user,pass) {
     try{
         DB.sendRegistrationDb(user,pass)
+
         res.writeHead(200, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({ message: 'Account created!' }))
     }catch(error){
@@ -69,7 +70,7 @@ async function reminders(res,id) {
 
 // @desc    Delete a reminder
 // @route   DELETE /api/reminders/:id
-async function reminders(res,id) {
+async function delReminders(res,id) {
     try{
         DB.sendRemindersDb(user,pass)
         res.writeHead(200, { 'Content-Type': 'application/json' })
@@ -78,4 +79,11 @@ async function reminders(res,id) {
         console.log(error)
     }
     
+}
+
+module.exports = {
+    register,
+    login,
+    reminders,
+    delReminders
 }

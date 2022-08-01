@@ -9,8 +9,8 @@
   "version": "1.0.0",
   "main": "App.js",
   "scripts": {
-    "start": "node App.js models/dbServer",
-    "dev": "nodemon App.js models/dbServer"
+    "start": "node App.js",
+    "dev": "nodemon App.js"
   },
   "repository": {
     "type": "git",
