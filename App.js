@@ -1,30 +1,30 @@
 const http = require('http')
-//const { login, register, getReminders, deleteReminder, createReminder, updateReminder } = require('./controllers/controller')
+const { register,login, reminders, delReminders } = require('./controllers/controller.js')
 
 
 
 
 const server = http.createServer((req,res) => {
-    if(req.url === '/api/register' && req.method==='POST'){ //POST
-        
+    if(req.url === '/api/register' && req.method==='POST'){ //POST - WORKS
+        register(res,/*username from frontend, hashed password from*/)
     }
-    if(req.url === '/api/login' && req.method==='POST'){ //POST
+    else if(req.url === '/api/login' && req.method==='POST'){ //POST
         res.writeHead(200, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({/*JSON to SQL*/}))
     }
-    if(req.url === '/api/reminders' && req.method==='GET'){ //GET
+    else if(req.url === '/api/reminders' && req.method==='GET'){ //GET
         res.writeHead(200, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({/*JSON to SQL*/}))
     }
-    if(req.url === '/api/reminders' && req.method==='POST'){ // POST
+    else if(req.url === '/api/reminders' && req.method==='POST'){ // POST
         res.writeHead(200, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({/*JSON to SQL*/}))
     }
-    if(req.url === ' /api/reminders/{id}' && req.method==='PUT'){ //PUT
+    else if(req.url === ' /api/reminders/{id}' && req.method==='PUT'){ //PUT
         res.writeHead(200, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({/*JSON to SQL*/}))
     }
-    if(req.url === ' /api/reminders/{id}' && req.method==='DELETE'){ //DELETE
+    else if(req.url === ' /api/reminders/{id}' && req.method==='DELETE'){ //DELETE
         res.writeHead(200, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({/*JSON to SQL*/}))
     }

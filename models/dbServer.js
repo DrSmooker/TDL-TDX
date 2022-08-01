@@ -7,7 +7,7 @@ const DB_PASSWORD = process.env.DB_PASSWORD
 const DB_DATABASE = process.env.DB_DATABASE
 const DB_PORT = process.env.DB_PORT
 
-
+/*connect to DB*/
 const db = mysql.createPool({
    connectionLimit: 100,
    host: DB_HOST,       
@@ -17,16 +17,14 @@ const db = mysql.createPool({
    port: 3306             
 })
 
-const user='Roanb'
-const pass='WTFaaad#$%Gds'
-
+/*Sends registration data to DB*/
 async function sendRegistrationDb(username, password){
    db.getConnection( (err, connection) => {
       if (err) throw (err)
       
       /*SQL query to search for user in DB*/
       const sqlSearch = "SELECT * FROM Users WHERE username = ?"
-      const search_query = mysql.format(sqlSearch,[user])
+      const search_query = mysql.format(sqlSearch,[username])
       /*SQL query to insert user to DB*/
       const sqlInsert = "INSERT INTO Users (username, password_hash) VALUES (?,?)"
       const insert_query = mysql.format(sqlInsert,[username, password])
@@ -57,8 +55,13 @@ async function sendRegistrationDb(username, password){
    
 }
 
+async function sendLoginDb(username, password){
+
+}
+
 module.exports = {
-   sendRegistrationDb
+   sendRegistrationDb,
+   sendLoginDb
 }
 
 
