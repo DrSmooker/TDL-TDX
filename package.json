@@ -3,7 +3,25 @@
     "mysql": "^2.18.1"
   },
   "devDependencies": {
-    "dotenv": "^16.0.1",
     "nodemon": "^2.0.19"
-  }
+  },
+  "name": "tdl-tdx",
+  "version": "1.0.0",
+  "main": "App.js",
+  "scripts": {
+    "start": "node App.js models/dbServer",
+    "dev": "nodemon App.js models/dbServer"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrSmooker/TDL-TDX.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DrSmooker/TDL-TDX/issues"
+  },
+  "homepage": "https://github.com/DrSmooker/TDL-TDX#readme",
+  "description": ""
 }
