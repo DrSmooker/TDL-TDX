@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Login</title>
+    </head>
+    <body>
+        <form action="/api/login" method = "POST">
+            <div class="field-name">
+                <input type="text" placeholder="Username" name="username" required >
+            </div>
+            <div class="field-password">
+                <input type="password" placeholder="Password" name="password" required>
+            </div>
+            <div class="field-finish">
+                <input type="submit" value="Submit">    
+            </div>
+        </form>
+
+        <script>module.exports = {
+            username,
+            password
+        }
+        </script>
+    </body>
+</html>

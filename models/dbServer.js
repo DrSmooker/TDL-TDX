@@ -2,6 +2,7 @@ const mysql = require("mysql")
 var http = require('https');
 var crypto = require('crypto');
 
+
 const DB_HOST = process.env.DB_HOST
 const DB_USER = process.env.DB_USER
 const DB_PASSWORD = process.env.DB_PASSWORD
@@ -49,7 +50,7 @@ async function sendRegistrationDb(username, password){
          if (result.length != 0) {
           connection.release()
           console.log("------> User already exists")
-          return 409 //HTTP code
+          return false //HTTP code
          } 
          else{/*Insert into DB*/
             db.query(insert_query, async (err, result) => {
@@ -57,7 +58,7 @@ async function sendRegistrationDb(username, password){
                if (err) throw err
                console.log ("--------> Created new User")
                console.log(result.insertId)
-               return 201 //HTTP code
+               return true //HTTP code
             })
          }
       })
@@ -84,27 +85,139 @@ async function sendLoginDb(username, password){
          if (result.length == 0) {
           
           console.log("------> User doesn't exist")
-          return 404 //HTTP code
+          return false //HTTP code
          } 
          else{
             const hashedPasswordDb = result[0].password_hash //get the hashed password from result (the first existing user found)
             if(hashedPasswordDb == hashedPasswordOrg){
                console.log(`---------> ${username} Logged In Successfuly!`)
-               return 201
+               
+               
+               
+               
+               return true
             }
             else{
                console.log("---------> Password Incorrect")
-               return 400
+               return false
             }
          }
       })
    })
 }
 
+async function getRemindersDb(){
+   db.getConnection( (err, connection) => {
+      if (err) throw (err)
+      const sqlSearch = "SELECT * FROM Reminders"
+      const search_query = mysql.format(sqlSearch)
+
+      db.query (search_query, async (err, result) => {
+         connection.release()
+
+         if (result.length == 0) {
+          
+            console.log("------> No reminders yet")
+            return false //HTTP code
+         }
+         else{
+            for ( var i = 0; i < result.length; i++ ) // loop that gets all reminders
+               console.log('\n\nid:' + result[i].id + '\ntitle: ' + result[i].title + '\ndescription: ' + result[i].description)
+         }
+         return true;
+      })
+   })
+}
+
+async function sendRemindersDb(title, description){
+   db.getConnection( (err, connection) => {
+      if (err) throw (err)
+      const sqlInsert = "INSERT INTO Reminders (title, description) VALUES (?,?)"
+      const insert_query = mysql.format(sqlInsert,[title, description])
+      db.query (insert_query, async (err, result) => {
+         connection.release()
+         if (err) throw err
+         console.log ("--------> Created new reminder")
+         console.log(result.insertId)
+         return true //HTTP code
+         
+      })
+   })
+}
+
+async function updateRemindersDb(id, title, description){
+   db.getConnection( (err, connection) => {
+      if (err) throw (err)
+      /*SQL query to search for reminder in DB*/
+      const sqlSearch = "SELECT * FROM Reminders WHERE id = ?"
+      const search_query = mysql.format(sqlSearch,[id])
+      const sqlUpdate = "UPDATE Reminders SET title = ?, description = ? WHERE id= "+id
+      const update_query = mysql.format(sqlUpdate,[title, description])
+      
+      /*Check if reminder exists*/
+      db.query (search_query, async (err, result) => {
+         if (err) throw (err)
+         if (result.length != 0) {
+          console.log("------> Reminder exists")
+          db.query (update_query, async (err, result) => {
+            connection.release()
+            if (err) throw err
+            console.log ("--------> Updated reminder")
+            console.log(result.insertId)
+            return true //HTTP code
+          })
+          
+         } 
+         else{//reminder doesn't exist
+            connection.release()
+            console.log("--------> Reminder doesn't exist")
+            return false
+         }
+      })
+   })
+}
+
+async function deleteRemindersDb(id){
+   db.getConnection( (err, connection) => {
+      if (err) throw (err)
+      /*SQL query to search for reminder in DB*/
+      const sqlSearch = "SELECT * FROM Reminders WHERE id = ?"
+      const search_query = mysql.format(sqlSearch,[id])
+      const sqlDelete = "DELETE FROM Reminders WHERE id= "+id
+      const delete_query = mysql.format(sqlDelete,[id])
+      
+      /*Check if reminder exists*/
+      db.query (search_query, async (err, result) => {
+         if (err) throw (err)
+         if (result.length != 0) {
+          console.log("------> Reminder exists")
+          db.query (delete_query, async (err, result) => {
+            connection.release()
+            if (err) throw err
+            console.log ("--------> Deleted reminder")
+            return true //HTTP code
+          })
+          
+         } 
+         else{//reminder doesn't exist
+            connection.release()
+            console.log("--------> Reminder doesn't exist")
+            return false
+         }
+      })
+   })
+}
+
+
+
 module.exports = {
    sendRegistrationDb,
    sendLoginDb,
-   hashPw
+   hashPw,
+   getRemindersDb,
+   sendRemindersDb,
+   updateRemindersDb,
+   deleteRemindersDb
 }
 
 
